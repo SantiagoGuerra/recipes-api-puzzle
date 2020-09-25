@@ -1,7 +1,6 @@
-import { Query, Resolver, Mutation, InputType, Field, Arg, Authorized, Int, Ctx } from 'type-graphql'
+import { Query, Resolver, Mutation, InputType, Field, Arg, Authorized, Int } from 'type-graphql'
 import { Category } from '../entity/Category'
-import { getRepository, In } from 'typeorm'
-import { Context } from 'vm'
+import { getRepository } from 'typeorm'
 
 
 @InputType()
@@ -66,6 +65,28 @@ export class CategoryResolver {
 		throw new Error('Id Category do not found')
 
 	
+	}
+
+	@Authorized()
+	@Mutation(() => String)
+	async deleteCategory(
+		@Arg('id', () => Int) id: number
+	) {
+		const categoryRepository = getRepository(Category)
+
+		const category = await categoryRepository.findOne({
+			where: {
+				id
+			}
+		})
+
+		if(category) {
+			await categoryRepository.remove(category)
+			return `The category with the ID:${id} has been deleted`
+		}
+
+		throw new Error('ID Category do not found')
+		
 	}
 
 	@Authorized()
