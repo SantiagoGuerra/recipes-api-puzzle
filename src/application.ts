@@ -6,12 +6,13 @@ import { buildSchema } from 'type-graphql'
 import {UserResolver} from './resolvers/User'
 import { CategoryResolver } from './resolvers/Category'
 import { authChecker, decodeToken } from './lib/authentication'
+import { RecipeResolver } from './resolvers/Recipe'
 
 export async function startServer() {
 	const app = express()
 	const server = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [UserResolver, CategoryResolver],
+			resolvers: [UserResolver, CategoryResolver, RecipeResolver],
 			authChecker,
 		}),
 		context: async ({ req } ) => {
