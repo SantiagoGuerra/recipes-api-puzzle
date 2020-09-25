@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Query, Resolver, Mutation, ObjectType, Field, Arg, InputType } from 'type-graphql'
 import { User } from '../entity/User'
 import bcrypt from 'bcrypt'
@@ -28,6 +27,15 @@ class SignUpInput {
   password!: string
 }
 
+@InputType()
+class LoginInput {
+
+  @Field(() => String)
+  email!: string
+
+  @Field(() => String)
+  password!: string
+}
 
 @Resolver()
 export class UserResolver {
@@ -70,6 +78,44 @@ export class UserResolver {
 			token
 		})
 	}
+  
+  @Mutation(() => TokenType)
+  async login(
+    @Arg('params', () => LoginInput) params: LoginInput
+  ) {
+  	const {email, password} = params
+
+  	const user = await User.findOne({
+  		where: {
+  			email
+  		}
+  	})
+    
+  	if(user) {
+  		const validate = await bcrypt.compare(password, user.password)
+      console.log(user)
+  		if(validate) {
+  			const token = createToken({
+  				name: user.name,
+  				email: user.email,
+  				id: user.id
+  			}, '1 day')
+  			return ({
+  				token
+  			})
+  		} else {
+  			throw new Error('Password Incorrect')
+        
+  		}
+  	} else {
+  		throw new Error('Email not found')
+      
+  	}
+
+
+    
+  	
+  }
 
   @Query(() => [User])
   hi() {
