@@ -5,10 +5,13 @@ import {
 	Column,
 	BaseEntity,
 	CreateDateColumn,
-	ManyToOne
+	ManyToOne,
+	JoinColumn,
+	OneToOne
 } from 'typeorm'
 import { Field, Int, ObjectType } from 'type-graphql'
 import { User } from './User'
+import { Category } from './Category'
 
 @ObjectType()
 @Entity()
@@ -29,13 +32,13 @@ export class Recipe extends BaseEntity {
   @Field()
   ingredients!: string;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, user => user.recipes)
   user!: User;
 
-  @Column()
-  @Field()
-  category!: string;
+  @OneToOne(() => Category)
+  @JoinColumn()
+  category!: Category;
 
 
   @Field(() => String)

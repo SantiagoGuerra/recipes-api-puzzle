@@ -33,7 +33,7 @@ export class User extends BaseEntity {
   @MinLength(8)
   password!: string;
 
-  @Field()
+  @Field(() => [Recipe])
   @OneToMany(() => Recipe, recipe => recipe.user)
   recipes!: Recipe[];
 
