@@ -99,4 +99,28 @@ export class RecipeResolver {
 
   	return recipe
   }
+
+  @Authorized()
+  @Query(() => [Recipe])
+  async getMyRecipes(@Ctx() context: any){
+  	const recipeRepository = getRepository(Recipe)
+
+  	const userRepository = getRepository(User)
+
+  	const user = await userRepository.findOne({
+  		join: {
+  			alias: 'user',
+  			leftJoinAndSelect: {
+  				recipes: 'user.recipes'
+  			}
+  		},
+  		where: {
+  			id: context.user.id
+  		}
+    
+  	})
+
+
+  	return user?.recipes
+  }
 }
