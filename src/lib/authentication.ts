@@ -11,6 +11,24 @@ export const createToken = async (payload:Record<string, unknown>, expiresIn:str
 
 export const authChecker = ( { context }: any) => {
  
-	console.log(context.user)
-	return true // or false if access is denied
+	const { req } = context
+
+
+	if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+		const token = req.headers.authorization.split(' ')[1]
+
+		if(jwt.verify(token, SECRET_KEY)) {
+			return true
+		} else {
+			false
+		}
+	}
+
+	return false
+}
+
+export const decodeToken = async (token: string) => {
+	const decoded = await jwt.decode(token)
+	
+	return decoded
 }
