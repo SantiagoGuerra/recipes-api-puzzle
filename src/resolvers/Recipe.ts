@@ -56,9 +56,9 @@ export class RecipeResolver {
 			const recipe = await recipeRepository.create({
 				name,
 				description,
-        ingredients,
-        user,
-        category
+				ingredients,
+				user,
+				category
 			})
 
 			return await recipeRepository.save(recipe)
@@ -78,6 +78,24 @@ export class RecipeResolver {
   	const recipe = await recipeRepository.find({
   		relations: ['user', 'category']
   	})
+
+  	return recipe
+  }
+
+  @Authorized()
+  @Query(() => Recipe)
+  async getOneRecipe(
+    @Arg('id', () => Int) id: number
+  ){
+  	const recipeRepository = getRepository(Recipe)
+
+  	const recipe = await recipeRepository.findOne({
+  		relations: ['category', 'user'],
+  		where: {
+  			id
+  		}
+  	})
+
 
   	return recipe
   }
