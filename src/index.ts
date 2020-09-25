@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import {startServer} from './application'
 
 async function main() {
