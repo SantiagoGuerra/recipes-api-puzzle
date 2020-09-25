@@ -11,7 +11,8 @@ export async function connect() {
 		password: process.env.DB_PASSWORD || '1234567',
 		database: process.env.DB_NAME || 'puzzle_challenge',
 		entities: [
-			path.join(__dirname, '../entity/**/**.ts')
+			path.join(__dirname, '../entity/**/**.ts'),
+			path.join(__dirname, '../entity/**/**.js')
 		],
 		synchronize: true
 	})
