@@ -129,6 +129,23 @@ export class RecipeResolver {
   
   }
 
+  @Authorized()
+  @Mutation(() => String)
+  async deleteRecipe(
+    @Arg('id', () => Int) id: number
+  ) {
+  	const recipeRepository = getRepository(Recipe)
+
+  	const recipe = await recipeRepository.findOne(id)
+
+  	if(recipe) {
+  		await recipeRepository.remove(recipe)
+  	}
+    
+
+  	return 'Recipe Deleted'
+  }
+
 
   @Authorized()
   @Query(() => [Recipe])
