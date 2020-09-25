@@ -15,6 +15,7 @@ export async function startServer() {
 			resolvers: [UserResolver, CategoryResolver, RecipeResolver],
 			authChecker,
 		}),
+		playground: true,
 		context: async ({ req } ) => {
 			
 			let user:any = {}
