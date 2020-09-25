@@ -93,7 +93,6 @@ export class UserResolver {
     
   	if(user) {
   		const validate = await bcrypt.compare(password, user.password)
-      console.log(user)
   		if(validate) {
   			const token = createToken({
   				name: user.name,

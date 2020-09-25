@@ -5,16 +5,14 @@ import {
 	Column,
 	BaseEntity,
 	CreateDateColumn,
-	OneToMany
+	ManyToOne
 } from 'typeorm'
 import { Field, Int, ObjectType } from 'type-graphql'
-import { IsEmail, MinLength } from 'class-validator'
-
-import {Recipe} from './Recipe'
+import { User } from './User'
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Recipe extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id!: number;
@@ -23,19 +21,22 @@ export class User extends BaseEntity {
   @Column()
   name!: string;
 
-  @Column({unique: true})
-  @Field()
-  @IsEmail()
-  email!: string;
-
-  @Field()
   @Column()
-  @MinLength(8)
-  password!: string;
+  @Field()
+  description!: string;
+
+  @Column()
+  @Field()
+  ingredients!: string;
 
   @Field()
-  @OneToMany(() => Recipe, recipe => recipe.user)
-  recipes!: Recipe[];
+  @ManyToOne(() => User, user => user.recipes)
+  user!: User;
+
+  @Column()
+  @Field()
+  category!: string;
+
 
   @Field(() => String)
   @CreateDateColumn({ type: 'timestamp' })

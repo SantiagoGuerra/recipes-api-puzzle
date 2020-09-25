@@ -8,3 +8,12 @@ export const createToken = async (payload:Record<string, unknown>, expiresIn:str
 
 	return token
 }
+
+export const authChecker = (
+	{ root, args, context, info },
+	roles,
+) => {
+ 
+	console.log(context.user)
+	return true // or false if access is denied
+}
