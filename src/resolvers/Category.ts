@@ -92,7 +92,9 @@ export class CategoryResolver {
 	@Authorized()
   @Query(() => [Category])
 	async getCategories() {
-		return Category.find()
+		return Category.find({
+			relations: ['recipes']
+		})
 	}
 
 	@Authorized()

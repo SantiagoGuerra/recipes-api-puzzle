@@ -116,9 +116,4 @@ export class UserResolver {
   	
   }
 
-  @Query(() => [User])
-  hi() {
-  	return User.find()
-  }
-
 }

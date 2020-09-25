@@ -32,12 +32,12 @@ export class Recipe extends BaseEntity {
   @Field()
   ingredients!: string;
 
-  @Field(() => User)
+  @Field(() => User, {nullable: true})
   @ManyToOne(() => User, user => user.recipes)
   user!: User;
 
-  @OneToOne(() => Category)
-  @JoinColumn()
+  @Field(() => Category, {nullable: true})
+  @ManyToOne(() => Category, category => category.recipes)
   category!: Category;
 
 
