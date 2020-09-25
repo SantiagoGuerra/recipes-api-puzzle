@@ -3,6 +3,7 @@ import { Recipe } from '../entity/Recipe'
 import { getRepository } from 'typeorm'
 import { User } from '../entity/User'
 import { Category } from '../entity/Category'
+import { isContext } from 'vm'
 
 
 
@@ -21,6 +22,24 @@ class CreateRecipeInput {
   @Field(() => Int)
   categoryId!: number
 
+}
+
+@InputType()
+class UpdateRecipeInput {
+
+  @Field(() => Int)
+  id!: number
+
+  @Field(() => String, {nullable: true})
+  name?: string
+
+  @Field(() => String, {nullable: true})
+  description?: string
+
+  @Field(() => String, {nullable: true})
+  ingredients?: string
+
+  
 }
 
 @Resolver()
@@ -68,6 +87,47 @@ export class RecipeResolver {
 		throw new Error('P Error')
     
 	}
+  
+  @Authorized()
+  @Mutation(() => Recipe)
+  async updateRecipe(
+    @Arg('params', () => UpdateRecipeInput) params: UpdateRecipeInput,
+    @Ctx() context: any
+  ) {
+
+  	const {
+  		id,
+  		name,
+  		description,
+  		ingredients
+  	} = params
+
+  	const recipeRepository = getRepository(Recipe)
+  	const userRepository = getRepository(User)
+
+  	const user = await userRepository.findOne(context.user.id)
+  	const recipe = await recipeRepository.findOne({
+  		relations: ['user', 'category'],
+  		where: {
+  			id,
+  			user
+  		}
+  	})
+  	if(recipe) {
+      
+
+  		if(name) recipe.name = name
+  		if(description)  recipe.description = description
+  		if(ingredients) recipe.ingredients = ingredients
+
+
+  		return recipe
+  	} else {
+  		throw new Error('This recipe does not belong you')
+      
+  	}
+  
+  }
 
 
   @Authorized()
@@ -103,8 +163,6 @@ export class RecipeResolver {
   @Authorized()
   @Query(() => [Recipe])
   async getMyRecipes(@Ctx() context: any){
-  	const recipeRepository = getRepository(Recipe)
-
   	const userRepository = getRepository(User)
 
   	const user = await userRepository.findOne({
