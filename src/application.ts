@@ -16,6 +16,7 @@ export async function startServer() {
 			authChecker,
 		}),
 		playground: true,
+		introspection: true,
 		context: async ({ req } ) => {
 			
 			let user:any = {}
