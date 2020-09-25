@@ -1,4 +1,4 @@
-import { Query, Resolver, Mutation, InputType, Field, Arg, Authorized } from 'type-graphql'
+import { Query, Resolver, Mutation, InputType, Field, Arg, Authorized, Int } from 'type-graphql'
 import { Category } from '../entity/Category'
 import { getRepository } from 'typeorm'
 
@@ -35,6 +35,24 @@ export class CategoryResolver {
   @Query(() => [Category])
 	async getCategories() {
 		return Category.find()
+	}
+
+	@Query(() => Category)
+	async getOneCategory(
+		@Arg('id', () => Int) id: number
+	) {
+
+		const categoryRepository = getRepository(Category)
+
+		const category = await categoryRepository.findOne({
+			where: {
+				id
+			}
+		})
+
+		console.log(category)
+
+		return category
 	}
 
 }
