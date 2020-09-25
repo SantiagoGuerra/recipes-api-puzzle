@@ -8,7 +8,7 @@ async function main() {
 	connect()
 
 	const app = await startServer()
-	const port = process.env.PORT || '4000'
+	const port = process.env.HOSTPORT || '4000'
 
 
 	app.listen(port, () => {
