@@ -108,16 +108,15 @@ npm install npm@latest -g
 
 ### Installation
 
-1. Get a free API Key at [https://openweathermap.org/](https://openweathermap.org/)
-2. Clone the repo
+1. Clone the repo
 ```sh
 git clone https:://github.com/SantiagoGuerra/recipes-api-puzzle.git
 ```
-3. Install NPM packages
+2. Install NPM packages
 ```sh
 npm install
 ```
-4. Set Up your .env file
+3. Set Up your .env file
 ```ruby
 HOST = 'ENTER...'
 DB_HOST = 'ENTER...'
